@@ -34,6 +34,12 @@ export default function useFetch<T> (
     try {
       const response = await fetch(url, payload)
       if (!response.ok) {
+        if (response.status === 422) {
+          // form submission errors
+          const json: unknown = await response.json()
+          setData((json as { errors: T }).errors)
+          throw new Error('There were some errors with your submission.')
+        }
         const text = await response.text()
         if (['<', '{'].includes(text.charAt(0))) throw new Error(response.statusText)
         throw new Error(text)
