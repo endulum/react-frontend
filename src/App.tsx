@@ -5,6 +5,7 @@ import useFetch from './useFetch.ts'
 import IndexWrapper from './components/IndexWrapper.tsx'
 import AuthWrapper from './components/AuthWrapper.tsx'
 import Login from './routes/Login.tsx'
+import Signup from './routes/Signup.tsx'
 import Index from './routes/Index.tsx'
 import './App.css'
 
@@ -50,7 +51,8 @@ export default function App (): JSX.Element | undefined {
         token !== null ? <Navigate to="/" /> : <AuthWrapper />
       }
       >
-        <Route path="login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Route>
       <Route
         element={

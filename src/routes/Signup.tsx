@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 
-export default function Login (): JSX.Element {
+export default function Signup (): JSX.Element {
   return (
     <>
       <div className="auth-form">
-        <h2>Log In</h2>
+        <h2>Sign Up</h2>
         <form>
           <label htmlFor="username">
             <span>Username</span>
@@ -16,10 +16,15 @@ export default function Login (): JSX.Element {
             <input type="password" id="password" />
           </label>
 
+          <label htmlFor="confirmPassword">
+            <span>Confirm Password</span>
+            <input type="password" id="confirmPassword" />
+          </label>
+
           <button type="submit">Submit</button>
         </form>
       </div>
-      <Link to="/signup">Sign up</Link>
+      <Link to="/login">Log in</Link>
     </>
   )
 }

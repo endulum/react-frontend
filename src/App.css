@@ -32,9 +32,47 @@ main, header {
   padding: 1rem;
 }
 
+input, textarea {
+  appearance: none;
+  padding: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  width: max-content;
+}
+
+input, textarea {
+  font-family: monospace;
+}
+
 .auth-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  gap: 1.5rem;
+  padding: 1rem;
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+    label {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 0.25rem;
+    }
+  }
 }
