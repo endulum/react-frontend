@@ -2,8 +2,11 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'usehooks-ts'
 import { useEffect } from 'react'
 import useFetch from './useFetch.ts'
-import Index from './routes/Index.tsx'
+import IndexWrapper from './components/IndexWrapper.tsx'
+import AuthWrapper from './components/AuthWrapper.tsx'
 import Login from './routes/Login.tsx'
+import Index from './routes/Index.tsx'
+import './App.css'
 
 export default function App (): JSX.Element | undefined {
   const [token, setToken] = useLocalStorage<string | null>('token', null)
@@ -43,17 +46,19 @@ export default function App (): JSX.Element | undefined {
   return (
     <Routes>
       <Route
-        path="/login"
         element={
-        token !== null ? <Navigate to="/" /> : <Login />
+        token !== null ? <Navigate to="/" /> : <AuthWrapper />
       }
-      />
+      >
+        <Route path="login" element={<Login />} />
+      </Route>
       <Route
-        path="/"
         element={
-        token !== null ? <Index data={data} /> : <Navigate to="/login" />
+        data !== null ? <IndexWrapper userData={data} /> : <Navigate to="/login" />
       }
-      />
+      >
+        <Route path="/" element={<Index />} />
+      </Route>
       <Route path="*" element={<p>Not found.</p>} />
     </Routes>
   )
