@@ -4,4 +4,4 @@ A template for a TypeScript frontend. Designed to work with the [Backend Templat
 ## Technologies
 - React as the framework
 - Vite as the bundler
-- Style enforced with ESLint ("Standard with TypeScript")
+- Style enforced with ESLint ("Standard with TypeScript" and "Airbnb")
