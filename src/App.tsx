@@ -6,7 +6,6 @@ import IndexWrapper from './components/IndexWrapper.tsx'
 import AuthWrapper from './components/AuthWrapper.tsx'
 import Login from './routes/Login.tsx'
 import Signup from './routes/Signup.tsx'
-// import AuthForm from './components/AuthForm.tsx'
 import Index from './routes/Index.tsx'
 import './App.css'
 
@@ -39,9 +38,12 @@ export default function App (): JSX.Element | undefined {
       // eslint-disable-next-line no-console
       console.warn('Invalid token provided, nullifying token...')
       setToken(null)
-      void fetchData()
     }
   }, [error])
+
+  useEffect(() => {
+    void fetchData()
+  }, [token])
 
   if (loading) return <p>Loading...</p>
   if (error !== null && error !== 'Please log in.') return <p>{error}</p>
@@ -49,16 +51,16 @@ export default function App (): JSX.Element | undefined {
     <Routes>
       <Route
         element={
-        token !== null ? <Navigate to="/" /> : <AuthWrapper />
-      }
+          token !== null ? <Navigate to="/" /> : <AuthWrapper />
+        }
       >
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
       <Route
         element={
-        data !== null ? <IndexWrapper userData={data} /> : <Navigate to="/login" />
-      }
+          data !== null ? <IndexWrapper userData={data} /> : <Navigate to="/login" />
+        }
       >
         <Route path="/" element={<Index />} />
       </Route>

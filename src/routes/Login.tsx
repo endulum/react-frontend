@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, type Dispatch, type SetStateAction } from 'react'
 import APIForm from '../components/APIForm.tsx'
 import { type FormErrors } from '../types.ts'
 
-export default function Login (): JSX.Element {
+export default function Login ({ setToken }: {
+  setToken: Dispatch<SetStateAction<string | null>>
+}): JSX.Element {
   const [formErrors, setFormErrors] = useState<FormErrors>([])
   const [formLoading, setFormLoading] = useState<boolean>(false)
 
@@ -15,11 +17,16 @@ export default function Login (): JSX.Element {
     return formErrors.find((error) => error.path === fieldname)?.msg
   }
 
+  function handleSuccess (data: { token: string }): void {
+    setToken(data.token)
+  }
+
   return (
     <>
       <div className="auth-form">
         <h2>Log In</h2>
         <APIForm
+          onSuccess={handleSuccess}
           fetchUrl="http://localhost:3000/login"
           fetchMethod="POST"
           handleFormErrors={setFormErrors}
