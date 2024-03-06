@@ -15,7 +15,7 @@ export default function App (): JSX.Element | undefined {
   const {
     data, loading, error, fetchData
   } = useFetch<{ username: string, id: string }>(
-    true,
+    false,
     'http://localhost:3000/login',
     {
       method: 'GET',
@@ -59,7 +59,7 @@ export default function App (): JSX.Element | undefined {
       </Route>
       <Route
         element={
-          data !== null ? <IndexWrapper userData={data} /> : <Navigate to="/login" />
+          data !== null ? <IndexWrapper userData={data} setToken={setToken} /> : <Navigate to="/login" />
         }
       >
         <Route path="/" element={<Index />} />
