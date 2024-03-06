@@ -4,6 +4,7 @@ import APIForm from '../components/APIForm.tsx'
 import { type FormErrors } from '../types.ts'
 
 export default function Signup (): JSX.Element {
+  const [success, setSuccess] = useState<boolean>(false)
   const [formErrors, setFormErrors] = useState<FormErrors>([])
   const [formLoading, setFormLoading] = useState<boolean>(false)
 
@@ -15,15 +16,29 @@ export default function Signup (): JSX.Element {
     return formErrors.find((error) => error.path === fieldname)?.msg
   }
 
+  function handleSuccess (): void {
+    setSuccess(true)
+  }
+
   return (
     <>
       <div className="auth-form">
         <h2>Sign Up</h2>
+        {success && (
+          <p className="auth-success">
+            Account created. Please
+            {' '}
+            <Link to="/login">log in</Link>
+            {' '}
+            to your new account.
+          </p>
+        )}
         <APIForm
           fetchUrl="http://localhost:3000/signup"
           fetchMethod="POST"
           handleFormErrors={setFormErrors}
           handleLoading={setFormLoading}
+          onSuccess={handleSuccess}
         >
           <label htmlFor="username">
             <span>Username</span>
