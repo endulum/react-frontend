@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import APIForm from '../components/APIForm.tsx'
 import { type FormErrors } from '../types.ts'
@@ -7,6 +7,8 @@ export default function Signup (): JSX.Element {
   const [success, setSuccess] = useState<boolean>(false)
   const [formErrors, setFormErrors] = useState<FormErrors>([])
   const [formLoading, setFormLoading] = useState<boolean>(false)
+
+  const usernameField = useRef<HTMLInputElement>(null)
 
   function isError (fieldName: string): boolean {
     return formErrors.some((error) => error.path === fieldName)
@@ -28,7 +30,9 @@ export default function Signup (): JSX.Element {
           <p className="auth-success">
             Account created. Please
             {' '}
-            <Link to="/login">log in</Link>
+            <Link to="/login" state={{ username: usernameField.current?.value }}>
+              log in
+            </Link>
             {' '}
             to your new account.
           </p>
@@ -42,7 +46,12 @@ export default function Signup (): JSX.Element {
         >
           <label htmlFor="username">
             <span>Username</span>
-            <input type="text" id="username" className={isError('username') ? 'error' : ''} />
+            <input
+              type="text"
+              id="username"
+              className={isError('username') ? 'error' : ''}
+              ref={usernameField}
+            />
             {isError('username') && <small>{getError('username')}</small>}
           </label>
 

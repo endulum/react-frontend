@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import APIForm from '../components/APIForm.tsx'
 import { type FormErrors } from '../types.ts'
@@ -8,6 +8,8 @@ export default function Login ({ setToken }: {
 }): JSX.Element {
   const [formErrors, setFormErrors] = useState<FormErrors>([])
   const [formLoading, setFormLoading] = useState<boolean>(false)
+
+  const { state } = useLocation()
 
   function isError (fieldName: string): boolean {
     return formErrors.some((error) => error.path === fieldName)
@@ -34,7 +36,12 @@ export default function Login ({ setToken }: {
         >
           <label htmlFor="username">
             <span>Username</span>
-            <input type="text" id="username" className={isError('username') ? 'error' : ''} />
+            <input
+              type="text"
+              id="username"
+              className={isError('username') ? 'error' : ''}
+              defaultValue={state?.username}
+            />
             {isError('username') && <small>{getError('username')}</small>}
           </label>
 
