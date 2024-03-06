@@ -6,6 +6,7 @@ import { type FormErrors } from '../types.ts'
 export default function Login ({ setToken }: {
   setToken: Dispatch<SetStateAction<string | null>>
 }): JSX.Element {
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
   const [formErrors, setFormErrors] = useState<FormErrors>([])
   const [formLoading, setFormLoading] = useState<boolean>(false)
 
@@ -27,10 +28,16 @@ export default function Login ({ setToken }: {
     <>
       <div className="auth-form">
         <h2>Log In</h2>
+        {submissionError !== null && (
+          <p>
+            {submissionError}
+          </p>
+        )}
         <APIForm
           onSuccess={handleSuccess}
           fetchUrl="http://localhost:3000/login"
           fetchMethod="POST"
+          handleSubmitError={setSubmissionError}
           handleFormErrors={setFormErrors}
           handleLoading={setFormLoading}
         >

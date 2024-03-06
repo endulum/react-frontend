@@ -4,12 +4,14 @@ import useFetch from '../useFetch.ts'
 import { type FormErrors } from '../types.ts'
 
 export default function APIForm ({
-  children, onSuccess, fetchUrl, fetchMethod, handleFormErrors, handleLoading
+  children, onSuccess, fetchUrl, fetchMethod,
+  handleSubmitError, handleFormErrors, handleLoading
 }: {
   children: JSX.Element | Array<JSX.Element | false>
   onSuccess: (...args: any) => void
   fetchUrl: string
   fetchMethod: string
+  handleSubmitError: Dispatch<SetStateAction<string | null>>
   handleFormErrors: Dispatch<SetStateAction<FormErrors>>
   handleLoading: Dispatch<SetStateAction<boolean>>
 }): JSX.Element {
@@ -41,10 +43,6 @@ export default function APIForm ({
     void fetchData()
   }
 
-  // useEffect(() => {
-  //   console.log(form)
-  // }, [form])
-
   useEffect(() => {
     if (error === null && data !== null) onSuccess(data)
   }, [data])
@@ -54,15 +52,17 @@ export default function APIForm ({
   }, [loading])
 
   useEffect(() => {
-    if (
-      error === 'There were some errors with your submission.' &&
+    if (error !== null) {
+      if (
+        error === 'There were some errors with your submission.' &&
       data !== null &&
       typeof data !== 'string'
-    ) {
-      handleFormErrors(data)
-    } else {
-      // console.log('hillaeo')
-      // handleFormErrors([])
+      ) {
+        handleSubmitError(null)
+        handleFormErrors(data)
+      } else {
+        handleSubmitError(error)
+      }
     }
   }, [error])
 

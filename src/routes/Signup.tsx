@@ -5,6 +5,7 @@ import { type FormErrors } from '../types.ts'
 
 export default function Signup (): JSX.Element {
   const [success, setSuccess] = useState<boolean>(false)
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
   const [formErrors, setFormErrors] = useState<FormErrors>([])
   const [formLoading, setFormLoading] = useState<boolean>(false)
 
@@ -26,6 +27,11 @@ export default function Signup (): JSX.Element {
     <>
       <div className="auth-form">
         <h2>Sign Up</h2>
+        {submissionError !== null && (
+          <p>
+            {submissionError}
+          </p>
+        )}
         {success && (
           <p className="auth-success">
             Account created. Please
@@ -40,6 +46,7 @@ export default function Signup (): JSX.Element {
         <APIForm
           fetchUrl="http://localhost:3000/signup"
           fetchMethod="POST"
+          handleSubmitError={setSubmissionError}
           handleFormErrors={setFormErrors}
           handleLoading={setFormLoading}
           onSuccess={handleSuccess}
