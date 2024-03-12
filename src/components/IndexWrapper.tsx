@@ -1,5 +1,5 @@
 import { type Dispatch, type SetStateAction } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 
 export default function IndexWrapper ({ userData, setToken }: {
   userData: { username: string, id: string }
@@ -15,7 +15,9 @@ export default function IndexWrapper ({ userData, setToken }: {
         <p>
           Logged in as
           {' '}
-          <b>{userData.username}</b>
+          <b>
+            <Link to="/">{userData.username}</Link>
+          </b>
         </p>
         <p>
           <button type="button" onClick={logOut}>Log Out</button>

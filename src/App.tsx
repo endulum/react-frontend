@@ -8,6 +8,7 @@ import Login from './routes/Login.tsx'
 import Signup from './routes/Signup.tsx'
 import Index from './routes/Index.tsx'
 import './App.css'
+import UserView from './routes/UserView.tsx'
 
 export default function App (): JSX.Element | undefined {
   const [token, setToken] = useLocalStorage<string | null>('token', null)
@@ -57,14 +58,18 @@ export default function App (): JSX.Element | undefined {
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
+      {data !== null && (
       <Route
         element={
           data !== null ? <IndexWrapper userData={data} setToken={setToken} /> : <Navigate to="/login" />
         }
       >
-        <Route path="/" element={<Index />} />
+        <Route path="/" element={<Index userData={data} />} />
+        <Route path="/user/:id" element={<UserView />} />
+        <Route path="*" element={<p>Not found.</p>} />
       </Route>
-      <Route path="*" element={<p>Not found.</p>} />
+      )}
+      <Route path="*" element={token === null ? <Navigate to="login" /> : <p>Not found.</p>} />
     </Routes>
   )
 }

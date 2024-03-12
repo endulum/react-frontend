@@ -1,11 +1,21 @@
 import { Link } from 'react-router-dom'
 
-export default function Index (): JSX.Element {
+export default function Index ({ userData }: {
+  userData: { username: string, id: string }
+}): JSX.Element {
   return (
-    <p>
-      This is the index.
-      {' '}
-      <Link to="/login">Go to login?</Link>
-    </p>
+    <>
+      <p>
+        This is the index.
+      </p>
+      <ul>
+        <li>
+          <Link to={`/user/${userData.username}`}>Your profile</Link>
+        </li>
+        <li>
+          <Link to="/geterroredboi">Nonexistent page</Link>
+        </li>
+      </ul>
+    </>
   )
 }
