@@ -42,6 +42,9 @@ input, textarea {
 button {
   padding: 0.5rem 1rem;
   width: max-content;
+  &:hover {
+    cursor: pointer
+  }
 }
 
 input, textarea {
@@ -56,7 +59,7 @@ input, textarea {
   gap: 1rem;
 }
 
-.auth-form {
+.auth-form, .edit-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,3 +81,22 @@ input, textarea {
     }
   }
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.modal-content {
+  padding: 1rem;
+  width: max-content;
+  height: max-content;
+}
+
+.ReactModalPortal, [data-react-modal-body-trap] { border: none }

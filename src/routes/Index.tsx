@@ -10,7 +10,7 @@ export default function Index ({ userData }: {
       </p>
       <ul>
         <li>
-          <Link to={`/user/${userData.username}`}>Your profile</Link>
+          <Link to={`/user/${userData.id}`}>Your profile</Link>
         </li>
         <li>
           <Link to="/geterroredboi">Nonexistent page</Link>

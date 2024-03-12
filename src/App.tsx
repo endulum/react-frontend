@@ -48,28 +48,27 @@ export default function App (): JSX.Element | undefined {
 
   if (loading) return <p>Loading...</p>
   if (error !== null && error !== 'Please log in.') return <p>{error}</p>
+
   return (
     <Routes>
-      <Route
-        element={
-          token !== null ? <Navigate to="/" /> : <AuthWrapper />
-        }
-      >
+      <Route element={token !== null ? <Navigate to="/" /> : <AuthWrapper />}>
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
       {data !== null && (
-      <Route
-        element={
-          data !== null ? <IndexWrapper userData={data} setToken={setToken} /> : <Navigate to="/login" />
-        }
-      >
-        <Route path="/" element={<Index userData={data} />} />
-        <Route path="/user/:id" element={<UserView />} />
-        <Route path="*" element={<p>Not found.</p>} />
-      </Route>
+        <Route element={<IndexWrapper userData={data} setToken={setToken} />}>
+          <Route path="/" element={<Index userData={data} />} />
+          <Route path="/user/:id" element={<UserView userData={data} />} />
+          <Route path="*" element={<p>Not found.</p>} />
+        </Route>
       )}
-      <Route path="*" element={token === null ? <Navigate to="login" /> : <p>Not found.</p>} />
+
+      <Route
+        path="*"
+        element={
+          token === null ? <Navigate to="login" /> : <p>Not found.</p>
+        }
+      />
     </Routes>
   )
 }
