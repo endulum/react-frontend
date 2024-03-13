@@ -1,17 +1,20 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'usehooks-ts'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import useFetch from './useFetch.ts'
+
 import IndexWrapper from './components/IndexWrapper.tsx'
 import AuthWrapper from './components/AuthWrapper.tsx'
 import Login from './routes/Login.tsx'
 import Signup from './routes/Signup.tsx'
 import Index from './routes/Index.tsx'
-import './App.css'
 import UserView from './routes/UserView.tsx'
+
+import './App.css'
 
 export default function App (): JSX.Element | undefined {
   const [token, setToken] = useLocalStorage<string | null>('token', null)
+  const [userData, setUserData] = useState<{ username: string, id: string } | null>(null)
 
   const {
     data, loading, error, fetchData
@@ -46,6 +49,10 @@ export default function App (): JSX.Element | undefined {
     void fetchData()
   }, [token])
 
+  useEffect(() => {
+    setUserData(data)
+  }, [data])
+
   if (loading) return <p>Loading...</p>
   if (error !== null && error !== 'Please log in.') return <p>{error}</p>
 
@@ -55,10 +62,15 @@ export default function App (): JSX.Element | undefined {
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
-      {data !== null && (
-        <Route element={<IndexWrapper setToken={setToken} />}>
-          <Route path="/" element={<Index userData={data} />} />
-          <Route path="/user/:id" element={<UserView userData={data} />} />
+      {userData !== null && (
+        <Route element={<IndexWrapper userData={userData} setToken={setToken} />}>
+          <Route path="/" element={<Index userData={userData} />} />
+          <Route
+            path="/user/:id"
+            element={
+              <UserView userData={userData} setUserData={setUserData} />
+            }
+          />
           <Route path="*" element={<p>Not found.</p>} />
         </Route>
       )}

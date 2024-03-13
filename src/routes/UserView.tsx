@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { type Dispatch, type SetStateAction, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 import APIForm from '../components/APIForm.tsx'
 import useFetch from '../useFetch.ts'
@@ -10,12 +10,15 @@ interface UserDetail {
   id: string
 }
 
-export default function UserView ({ userData }: {
-  userData: { id: string }
+export default function UserView ({ userData, setUserData }: {
+  userData: { username: string, id: string }
+  setUserData: Dispatch<SetStateAction<{ username: string, id: string } | null>>
 }): JSX.Element | undefined {
   Modal.setAppElement('#root')
 
+  const navigate = useNavigate()
   const params = useParams()
+
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
   const [submissionError, setSubmissionError] = useState<string | null>(null)
   const [formErrors, setFormErrors] = useState<FormErrors>([])
@@ -39,9 +42,15 @@ export default function UserView ({ userData }: {
     return formErrors.find((formError) => formError.path === fieldname)?.msg
   }
 
-  function handleSuccess (): void {
+  function handleSuccess (_dummy: any, form: { username: string }): void {
     setModalIsOpen(false)
-    void fetchData()
+    if (form.username !== userData.username) {
+      setUserData({ ...userData, username: form.username })
+      navigate(`/user/${form.username}`)
+      navigate(0)
+    } else {
+      void fetchData()
+    }
   }
 
   if (loading) return <p>Loading...</p>

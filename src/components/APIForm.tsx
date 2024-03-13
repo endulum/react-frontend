@@ -8,7 +8,7 @@ export default function APIForm ({
   handleSubmitError, handleFormErrors, handleLoading
 }: {
   children: JSX.Element | Array<JSX.Element | false>
-  onSuccess: (...args: any) => void
+  onSuccess: (...args: any | never) => void
   fetchUrl: string
   fetchMethod: string
   handleSubmitError: Dispatch<SetStateAction<string | null>>
@@ -47,7 +47,7 @@ export default function APIForm ({
   }
 
   useEffect(() => {
-    if (error === null && data !== null) onSuccess(data)
+    if (error === null && data !== null) onSuccess(data, form)
   }, [data])
 
   useEffect(() => {

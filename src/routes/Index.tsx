@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 export default function Index ({ userData }: {
-  userData: { id: string }
+  userData: { username: string, id: string }
 }): JSX.Element {
   return (
     <>
@@ -10,7 +10,7 @@ export default function Index ({ userData }: {
       </p>
       <ul>
         <li>
-          <Link to={`/user/${userData.id}`}>Your profile</Link>
+          <Link to={`/user/${userData.username}`}>Your profile</Link>
         </li>
         <li>
           <Link to="/geterroredboi">Nonexistent page</Link>

@@ -34,6 +34,13 @@ main, header {
   padding: 1rem;
 }
 
+nav {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
 input, textarea {
   appearance: none;
   padding: 0.5rem;
