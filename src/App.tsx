@@ -51,12 +51,12 @@ export default function App (): JSX.Element | undefined {
 
   return (
     <Routes>
-      <Route element={token !== null ? <Navigate to="/" /> : <AuthWrapper />}>
+      <Route element={token === null ? <AuthWrapper /> : <Navigate to="/" />}>
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/signup" element={<Signup />} />
       </Route>
       {data !== null && (
-        <Route element={<IndexWrapper userData={data} setToken={setToken} />}>
+        <Route element={<IndexWrapper setToken={setToken} />}>
           <Route path="/" element={<Index userData={data} />} />
           <Route path="/user/:id" element={<UserView userData={data} />} />
           <Route path="*" element={<p>Not found.</p>} />

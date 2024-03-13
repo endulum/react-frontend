@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import Modal from 'react-modal'
 import APIForm from '../components/APIForm.tsx'
 import useFetch from '../useFetch.ts'
@@ -11,11 +11,9 @@ interface UserDetail {
 }
 
 export default function UserView ({ userData }: {
-  userData: { username: string, id: string }
+  userData: { id: string }
 }): JSX.Element | undefined {
   Modal.setAppElement('#root')
-
-  const navigate = useNavigate()
 
   const params = useParams()
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
@@ -64,6 +62,11 @@ export default function UserView ({ userData }: {
           isOpen={modalIsOpen}
         >
           <h2>Edit Profile Details</h2>
+          {submissionError !== null && (
+            <p>
+              {submissionError}
+            </p>
+          )}
           <APIForm
             onSuccess={handleSuccess}
             fetchUrl={`http://localhost:3000/user/${data.username}`}

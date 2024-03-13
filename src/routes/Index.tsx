@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 export default function Index ({ userData }: {
-  userData: { username: string, id: string }
+  userData: { id: string }
 }): JSX.Element {
   return (
     <>
