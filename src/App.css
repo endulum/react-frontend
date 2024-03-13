@@ -89,6 +89,20 @@ input, textarea {
   }
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1.5rem;
+  label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+  }
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

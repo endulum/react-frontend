@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 import APIForm from '../components/APIForm.tsx'
 import useFetch from '../useFetch.ts'
-import { type FormErrors } from '../types.ts'
 
 interface UserDetail {
   username: string
@@ -20,9 +19,6 @@ export default function UserView ({ userData, setUserData }: {
   const params = useParams()
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-  const [submissionError, setSubmissionError] = useState<string | null>(null)
-  const [formErrors, setFormErrors] = useState<FormErrors>([])
-  const [formLoading, setFormLoading] = useState<boolean>(false)
 
   const {
     data, loading, error, fetchData
@@ -33,14 +29,6 @@ export default function UserView ({ userData, setUserData }: {
       method: 'GET'
     }
   )
-
-  function isError (fieldName: string): boolean {
-    return formErrors.some((formError) => formError.path === fieldName)
-  }
-
-  function getError (fieldname: string): string | undefined {
-    return formErrors.find((formError) => formError.path === fieldname)?.msg
-  }
 
   function handleSuccess (_dummy: any, form: { username: string }): void {
     setModalIsOpen(false)
@@ -71,30 +59,18 @@ export default function UserView ({ userData, setUserData }: {
           isOpen={modalIsOpen}
         >
           <h2>Edit Profile Details</h2>
-          {submissionError !== null && (
-            <p>
-              {submissionError}
-            </p>
-          )}
           <APIForm
+            endpoint={{
+              url: `http://localhost:3000/user/${data.username}`,
+              method: 'PUT'
+            }}
             onSuccess={handleSuccess}
-            fetchUrl={`http://localhost:3000/user/${data.username}`}
-            fetchMethod="PUT"
-            handleSubmitError={setSubmissionError}
-            handleFormErrors={setFormErrors}
-            handleLoading={setFormLoading}
           >
             <label htmlFor="username">
               <span>Username</span>
-              <input
-                type="text"
-                id="username"
-                className={isError('username') ? 'error' : ''}
-                defaultValue={data.username}
-              />
-              {isError('username') && <small>{getError('username')}</small>}
+              <input type="text" id="username" defaultValue={data.username} />
             </label>
-            <button type="submit" disabled={formLoading}>Submit</button>
+            <button type="submit">Submit</button>
           </APIForm>
           <button type="button" onClick={() => { setModalIsOpen(false) }}>
             Cancel

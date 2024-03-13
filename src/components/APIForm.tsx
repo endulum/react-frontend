@@ -1,31 +1,25 @@
-import { useState, type FormEvent, type SetStateAction, type Dispatch, useEffect } from 'react'
+import { useState, type FormEvent, useEffect } from 'react'
 import { useReadLocalStorage } from 'usehooks-ts'
 import useFetch from '../useFetch.ts'
 import { type FormErrors } from '../types.ts'
 
-export default function APIForm ({
-  children, onSuccess, fetchUrl, fetchMethod,
-  handleSubmitError, handleFormErrors, handleLoading
-}: {
-  children: JSX.Element | Array<JSX.Element | false>
-  onSuccess: (...args: any | never) => void
-  fetchUrl: string
-  fetchMethod: string
-  handleSubmitError: Dispatch<SetStateAction<string | null>>
-  handleFormErrors: Dispatch<SetStateAction<FormErrors>>
-  handleLoading: Dispatch<SetStateAction<boolean>>
+export default function APIForm ({ endpoint, onSuccess, children }: {
+  children: JSX.Element[]
+  onSuccess: (...args: any) => void
+  endpoint: { url: string, method: string }
 }): JSX.Element {
   const token = useReadLocalStorage<string>('token')
   const [form, setForm] = useState<Record<string, string>>({})
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const {
     data, loading, error, fetchData
   } = useFetch<string | FormErrors>(
     false,
-    fetchUrl,
+    endpoint.url,
     {
-      method: fetchMethod ?? 'POST',
+      method: endpoint.method ?? 'POST',
       headers: {
         'Content-type': 'application/json',
         Authorization: token !== null ? `Bearer ${token}` : ''
@@ -47,38 +41,71 @@ export default function APIForm ({
   }
 
   useEffect(() => {
-    if (error === null && data !== null) onSuccess(data, form)
-  }, [data])
-
-  useEffect(() => {
-    if (isSubmitting) {
-      void fetchData()
-    }
-    setIsSubmitting(false)
-  }, [isSubmitting])
-
-  useEffect(() => {
-    handleLoading(loading)
-  }, [loading])
-
-  useEffect(() => {
-    if (error !== null) {
-      if (
-        error === 'There were some errors with your submission.' &&
-      data !== null &&
-      typeof data !== 'string'
-      ) {
-        handleSubmitError(null)
-        handleFormErrors(data)
-      } else {
-        handleSubmitError(error)
-      }
+    // if we get input errors
+    if (error === 'There were some errors with your submission.') {
+      const errors: Record<string, string> = {};
+      (data as FormErrors).forEach((err) => { errors[err.path] = err.msg })
+      setFormErrors(errors)
     }
   }, [error])
 
+  useEffect(() => {
+    // if we are submitting the form
+    if (isSubmitting) {
+      setIsSubmitting(false)
+      setFormErrors({})
+      void fetchData()
+    }
+  }, [isSubmitting])
+
+  useEffect(() => {
+    // if our submission was successful
+    if (error === null && data !== null) {
+      onSuccess(data, form)
+    }
+  }, [data])
+
   return (
     <form onSubmit={handleSubmit}>
-      {children}
+      {error !== null && <p>{error}</p>}
+      {children.map((child) => {
+        if (child.type === 'label') {
+          return (
+            <Input
+              key={child.props.htmlFor}
+              formErrors={formErrors}
+            >
+              {child.props.children}
+            </Input>
+          )
+        } if (child.type === 'button') {
+          return (
+            <button type="submit" key="submit" disabled={loading}>
+              {loading ? 'Processing...' : (child.props.children)}
+            </button>
+          )
+        } return child
+      })}
     </form>
+  )
+}
+
+function Input ({ formErrors, children }: {
+  children: JSX.Element[]
+  formErrors: Record<string, string>
+}): JSX.Element {
+  const fieldName = children[0].props.children.toLowerCase()
+  return (
+    <label
+      htmlFor={fieldName}
+      className={fieldName in formErrors ? 'error' : ''}
+    >
+      {children}
+      {fieldName in formErrors && (
+        <small>
+          {formErrors[fieldName]}
+        </small>
+      )}
+    </label>
   )
 }
