@@ -9,7 +9,7 @@ interface UserDetail {
   id: string
 }
 
-export default function UserView ({ userData, setUserData }: {
+export default function User ({ userData, setUserData }: {
   userData: { username: string, id: string }
   setUserData: Dispatch<SetStateAction<{ username: string, id: string } | null>>
 }): JSX.Element | undefined {
@@ -49,7 +49,7 @@ export default function UserView ({ userData, setUserData }: {
         <h1>{data.username}</h1>
         {data.id === userData.id && (
           <button type="button" onClick={() => { setModalIsOpen(true) }}>
-            Edit your details
+            Account Settings
           </button>
         )}
         <Modal
@@ -58,7 +58,7 @@ export default function UserView ({ userData, setUserData }: {
           contentLabel="Editing Profile Details"
           isOpen={modalIsOpen}
         >
-          <h2>Edit Profile Details</h2>
+          <h2>Edit Account Details</h2>
           <APIForm
             endpoint={{
               url: `http://localhost:3000/user/${data.username}`,
@@ -66,10 +66,26 @@ export default function UserView ({ userData, setUserData }: {
             }}
             onSuccess={handleSuccess}
           >
+            <h3>Profile Details</h3>
             <label htmlFor="username">
               <span>Username</span>
               <input type="text" id="username" defaultValue={data.username} />
             </label>
+
+            <h3>Change Password</h3>
+            <label htmlFor="newPassword">
+              <span>New Password</span>
+              <input type="password" id="newPassword" />
+            </label>
+            <label htmlFor="confirmNewPassword">
+              <span>Confirm New Password</span>
+              <input type="password" id="confirmNewPassword" />
+            </label>
+            <label htmlFor="currentPassword">
+              <span>Current Password</span>
+              <input type="password" id="currentPassword" />
+            </label>
+
             <button type="submit">Submit</button>
           </APIForm>
           <button type="button" onClick={() => { setModalIsOpen(false) }}>

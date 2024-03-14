@@ -8,7 +8,7 @@ import AuthWrapper from './components/AuthWrapper.tsx'
 import Login from './routes/Login.tsx'
 import Signup from './routes/Signup.tsx'
 import Index from './routes/Index.tsx'
-import UserView from './routes/UserView.tsx'
+import User from './routes/User.tsx'
 
 import './App.css'
 
@@ -68,7 +68,7 @@ export default function App (): JSX.Element | undefined {
           <Route
             path="/user/:id"
             element={
-              <UserView userData={userData} setUserData={setUserData} />
+              <User userData={userData} setUserData={setUserData} />
             }
           />
           <Route path="*" element={<p>Not found.</p>} />

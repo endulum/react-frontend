@@ -73,6 +73,7 @@ export default function APIForm ({ endpoint, onSuccess, children }: {
           return (
             <Input
               key={child.props.htmlFor}
+              fieldName={child.props.htmlFor}
               formErrors={formErrors}
             >
               {child.props.children}
@@ -90,11 +91,11 @@ export default function APIForm ({ endpoint, onSuccess, children }: {
   )
 }
 
-function Input ({ formErrors, children }: {
+function Input ({ formErrors, fieldName, children }: {
   children: JSX.Element[]
+  fieldName: string
   formErrors: Record<string, string>
 }): JSX.Element {
-  const fieldName = children[1].props.id
   return (
     <label
       htmlFor={fieldName}
