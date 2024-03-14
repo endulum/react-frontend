@@ -94,7 +94,7 @@ function Input ({ formErrors, children }: {
   children: JSX.Element[]
   formErrors: Record<string, string>
 }): JSX.Element {
-  const fieldName = children[0].props.children.toLowerCase()
+  const fieldName = children[1].props.id
   return (
     <label
       htmlFor={fieldName}
