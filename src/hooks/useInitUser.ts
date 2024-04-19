@@ -10,6 +10,7 @@ export default function useInitUser (): {
   initError: string | null
   user: IUser | null
   initUser: () => Promise<void>
+  changeUsername: (username: string) => void
 } {
   const initialized = useRef<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
@@ -46,6 +47,10 @@ export default function useInitUser (): {
     setLoading(false)
   }
 
+  function changeUsername (username: string): void {
+    if (user !== null) setUser({ ...user, username })
+  }
+
   useEffect(() => {
     if (!initialized.current) {
       initialized.current = true
@@ -53,5 +58,5 @@ export default function useInitUser (): {
     }
   }, [])
 
-  return { loading, initError, user, initUser }
+  return { loading, initError, user, initUser, changeUsername }
 }

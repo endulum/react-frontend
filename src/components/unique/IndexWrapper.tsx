@@ -1,10 +1,12 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 
+import { clearStoredToken } from '../../functions/tokenUtils.ts'
 import { type IUser } from '../../types.ts'
 
 export default function IndexWrapper (
-  { user }: {
+  { user, initUser }: {
     user: IUser
+    initUser: () => Promise<void>
   }
 ): JSX.Element {
   return (
@@ -14,6 +16,25 @@ export default function IndexWrapper (
         {' '}
         {user.username}
       </h1>
+      <ul>
+        <li>
+          <Link to="/">Index</Link>
+        </li>
+        <li>
+          <Link to="settings">Settings</Link>
+        </li>
+        <li>
+          <Link
+            to="login"
+            onClick={() => {
+              clearStoredToken()
+              void initUser()
+            }}
+          >
+            Log out
+          </Link>
+        </li>
+      </ul>
       <div className="index-body">
         <Outlet />
       </div>

@@ -6,7 +6,9 @@ import AuthRouter from './components/routers/AuthRouter.tsx'
 import IndexRouter from './components/routers/IndexRouter.tsx'
 
 export default function App (): JSX.Element {
-  const { loading, initError, user, initUser } = useInitUser()
+  const {
+    loading, initError, user, initUser, changeUsername
+  } = useInitUser()
 
   useEffect(() => {
     console.log({ loading, initError, user })
@@ -31,6 +33,7 @@ export default function App (): JSX.Element {
       <IndexRouter
         user={user}
         initUser={initUser}
+        changeUsername={changeUsername}
       />
       )
 }

@@ -1,31 +1,25 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import IndexWrapper from '../unique/IndexWrapper.tsx'
-import { clearStoredToken } from '../../functions/tokenUtils.ts'
+import UserSettings from '../unique/UserSettings.tsx'
 import { type IUser } from '../../types.ts'
 
 export default function IndexRouter (
-  { user, initUser }: {
+  { user, initUser, changeUsername }: {
     user: IUser
     initUser: () => Promise<void>
+    changeUsername: (username: string) => void
   }
 ): JSX.Element {
   return (
     <Routes>
-      <Route element={<IndexWrapper user={user} />}>
+      <Route element={<IndexWrapper user={user} initUser={initUser} />}>
+        <Route path="/" element={<p>Hey.</p>} />
         <Route
-          path="/"
-          element={(
-            <button
-              type="button"
-              onClick={() => {
-                clearStoredToken()
-                void initUser()
-              }}
-            >
-              Log Out
-            </button>
-          )}
+          path="settings"
+          element={
+            <UserSettings user={user} changeUsername={changeUsername} />
+          }
         />
         <Route path="/login" element={<Navigate to="/" />} />
         <Route path="/signup" element={<Navigate to="/" />} />
