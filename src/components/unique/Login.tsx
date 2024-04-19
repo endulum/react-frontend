@@ -1,5 +1,5 @@
-import APIForm from '../general-components/APIForm.tsx'
-import { setStoredToken } from '../functions/tokenUtils.ts'
+import APIForm from '../APIForm.tsx'
+import { setStoredToken } from '../../functions/tokenUtils.ts'
 
 export default function Login (
   { initUser }: {

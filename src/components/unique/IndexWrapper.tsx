@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
-import { type IUser } from '../types.ts'
+import { type IUser } from '../../types.ts'
 
 export default function IndexWrapper (
   { user }: {

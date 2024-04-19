@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 
 import useInitUser from './hooks/useInitUser.ts'
-import LoadingWrapper from './general-components/LoadingWrapper.tsx'
-import AuthRouter from './routes/AuthRouter.tsx'
-import IndexRouter from './routes/IndexRouter.tsx'
+import LoadingWrapper from './components/LoadingWrapper.tsx'
+import AuthRouter from './components/routers/AuthRouter.tsx'
+import IndexRouter from './components/routers/IndexRouter.tsx'
 
 export default function App (): JSX.Element {
   const { loading, initError, user, initUser } = useInitUser()

@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import IndexWrapper from '../unique-components/IndexWrapper.tsx'
-import { clearStoredToken } from '../functions/tokenUtils.ts'
-import { type IUser } from '../types.ts'
+import IndexWrapper from '../unique/IndexWrapper.tsx'
+import { clearStoredToken } from '../../functions/tokenUtils.ts'
+import { type IUser } from '../../types.ts'
 
 export default function IndexRouter (
   { user, initUser }: {

@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import AuthWrapper from '../unique-components/AuthWrapper.tsx'
-import Login from '../unique-components/Login.tsx'
+import AuthWrapper from '../unique/AuthWrapper.tsx'
+import Login from '../unique/Login.tsx'
 
 export default function AuthRouter (
   { initUser }: {
