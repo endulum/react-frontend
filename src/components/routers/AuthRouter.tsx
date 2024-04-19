@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 
 import AuthWrapper from '../unique/AuthWrapper.tsx'
 import Login from '../unique/Login.tsx'
+import Signup from '../unique/Signup.tsx'
 
 export default function AuthRouter (
   { initUser }: {
@@ -12,7 +13,7 @@ export default function AuthRouter (
     <Routes>
       <Route element={<AuthWrapper />}>
         <Route path="login" element={<Login initUser={initUser} />} />
-        <Route path="signup" element={<p>Sign up here.</p>} />
+        <Route path="signup" element={<Signup />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Route>
     </Routes>
