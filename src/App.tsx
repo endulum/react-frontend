@@ -1,18 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
-import useInitUser from './hooks/useInitUser.ts'
-import LoadingWrapper from './components/LoadingWrapper.tsx'
-import AuthRouter from './components/routers/AuthRouter.tsx'
-import IndexRouter from './components/routers/IndexRouter.tsx'
+import useInitUser from './hooks/useInitUser';
+import LoadingWrapper from './components/LoadingWrapper';
+import AuthRouter from './components/routers/AuthRouter';
+import IndexRouter from './components/routers/IndexRouter';
 
-export default function App (): JSX.Element {
+export default function App(): JSX.Element {
   const {
-    loading, initError, user, initUser, changeUsername
-  } = useInitUser()
+    loading, initError, user, initUser, changeUsername,
+  } = useInitUser();
 
   useEffect(() => {
-    console.log({ loading, initError, user })
-  }, [loading, initError, user])
+    console.log({ loading, initError, user });
+  }, [loading, initError, user]);
 
   if (loading) {
     return (
@@ -20,7 +20,7 @@ export default function App (): JSX.Element {
         loading={loading}
         error={initError}
       />
-    )
+    );
   }
 
   return user === null
@@ -28,12 +28,12 @@ export default function App (): JSX.Element {
       <AuthRouter
         initUser={initUser}
       />
-      )
+    )
     : (
       <IndexRouter
         user={user}
         initUser={initUser}
         changeUsername={changeUsername}
       />
-      )
+    );
 }

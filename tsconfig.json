@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "eslint.config.mjs"],
   "exclude": ["trash"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
