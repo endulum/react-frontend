@@ -51,6 +51,9 @@ export default [
       // 'import/no-unresolved': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/jsx-filename-extension': 'off',
+      'react/jsx-props-no-spreading': ['error', {
+        html: 'ignore',
+      }],
       // 'react/jsx-no-bind': 'off',
       // 'react-hooks/exhaustive-deps': 'off',
 

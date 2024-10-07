@@ -1,67 +1,72 @@
+import {
+  Routes, Route, Link, Navigate, useNavigate,
+} from 'react-router-dom';
 // own imports
-import { clearStoredToken, setStoredToken } from './functions/tokenUtils';
-import useFormRequest from './hooks/useFormRequest';
 import useInitUser from './hooks/useInitUser';
-import LoadingWrapper from './components/LoadingWrapper';
+import LoadingWrapper from './components/reusable/LoadingWrapper';
+import PageWrapper from './components/unique/PageWrapper';
+import Login from './components/unique/Login';
+import Signup from './components/unique/Signup';
+import Account from './components/unique/Account';
+import { setStoredToken } from './functions/tokenUtils';
 
 export default function App() {
+  const navigate = useNavigate();
   const {
     loading: userLoading, error: initError, user, initUser,
   } = useInitUser();
 
-  const {
-    loading: formLoading, error: formError, inputErrors, handleSubmit,
-  } = useFormRequest<{ token: string }>(
-    { endpoint: '/login', method: 'POST' },
-    (_formData, fetchResult) => {
-      setStoredToken(fetchResult.token);
-      initUser();
-    },
-  );
-
   if (userLoading || initError !== null) {
-    return (
-      <LoadingWrapper
-        loading={userLoading}
-        error={initError}
-      />
-    );
+    return <LoadingWrapper loading={userLoading} error={initError} />;
   }
-  if (user) {
-    return (
-      <p>
-        Welcome in!
-        <button
-          type="button"
-          onClick={() => {
-            clearStoredToken();
-            initUser();
-          }}
-        >
-          Log out
-        </button>
-      </p>
-    );
-  }
-  return (
-    <form onSubmit={handleSubmit}>
-      {formError ? <p>{formError}</p> : ''}
-      <label htmlFor="username">
-        Username
-        <input type="text" id="username" autoComplete="on" />
-        { inputErrors && 'username' in inputErrors ? (
-          <small>{inputErrors.username}</small>
-        ) : ''}
-      </label>
-      <label htmlFor="password">
-        Password
-        <input type="password" id="password" autoComplete="on" />
-        {inputErrors && 'password' in inputErrors ? (
-          <small>{inputErrors.password}</small>
-        ) : ''}
-      </label>
 
-      <button type="submit" disabled={formLoading}>Submit</button>
-    </form>
+  return (
+    <Routes>
+      <Route element={<PageWrapper user={user} initUser={initUser} />}>
+        {user ? (
+          <>
+            <Route path="/" element={<p>Welcome back!</p>} />
+            <Route path="/account" element={<Account currentUsername={user.username} />} />
+            <Route path="/login" element={<Navigate to="/" />} />
+            <Route path="/signup" element={<Navigate to="/" />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<p>Welcome! Please sign in.</p>} />
+            <Route
+              path="/login"
+              element={(
+                <Login logIn={(token: string) => {
+                  setStoredToken(token);
+                  initUser();
+                }}
+                />
+              )}
+            />
+            <Route
+              path="/signup"
+              element={(
+                <Signup signUp={(username: string) => {
+                  navigate('/login', {
+                    state: { username },
+                  });
+                }}
+                />
+              )}
+            />
+          </>
+        )}
+
+        <Route
+          path="*"
+          element={(
+            <>
+              <p>There&apos;s nothing here...</p>
+              <Link to="/">Go to index</Link>
+            </>
+          )}
+        />
+      </Route>
+    </Routes>
   );
 }

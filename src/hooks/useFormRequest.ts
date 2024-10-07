@@ -52,8 +52,6 @@ export default function useFormRequest<T>(
     );
     setLoading(false);
 
-    // console.dir(fetchResult, { depth: null });
-
     if (fetchResult.error) setError(fetchResult.error);
     if (
       fetchResult.status === 400
@@ -66,7 +64,7 @@ export default function useFormRequest<T>(
         inputErrorRecord[inputError.path] = inputError.msg;
       });
       setInputErrors(inputErrorRecord);
-    } else if (fetchResult.status) {
+    } else if (fetchResult.status === 200) {
       onSuccess(formData, fetchResult.data as T);
     }
   }
