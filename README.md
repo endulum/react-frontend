@@ -1,7 +1,7 @@
-# Fullstack Typescript - Frontend Template
-A template for a TypeScript frontend.
+# React Frontend Template
+- **Lang:** TypeScript (`.ts`, `.tsx`)
+- **Bundler:** Vite
+- **Linting:** ESLint with the Airbnb style guide and React recommendations
 
-## Technologies
-- React as the framework
-- Vite as the bundler
-- Style enforced with ESLint
+## Todo
+- Consider adding testing
