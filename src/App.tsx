@@ -5,6 +5,7 @@ import {
 import useInitUser from './hooks/useInitUser';
 import LoadingWrapper from './components/reusable/LoadingWrapper';
 import PageWrapper from './components/unique/PageWrapper';
+import Index from './components/routes/Index';
 import Login from './components/routes/Login';
 import Signup from './components/routes/Signup';
 import Account from './components/routes/Account';
@@ -13,26 +14,25 @@ import { setStoredToken } from './functions/tokenUtils';
 export default function App() {
   const navigate = useNavigate();
   const {
-    loading: userLoading, error: initError, user, initUser,
+    loading, error, user, initUser,
   } = useInitUser();
 
-  if (userLoading || initError !== null) {
-    return <LoadingWrapper loading={userLoading} error={initError} />;
+  if (loading || error !== null) {
+    return <LoadingWrapper loading={loading} error={error} />;
   }
 
   return (
     <Routes>
       <Route element={<PageWrapper user={user} initUser={initUser} />}>
+        <Route path="/" element={<Index user={user} />} />
         {user ? (
           <>
-            <Route path="/" element={<p>Welcome back!</p>} />
             <Route path="/account" element={<Account currentUsername={user.username} />} />
             <Route path="/login" element={<Navigate to="/" />} />
             <Route path="/signup" element={<Navigate to="/" />} />
           </>
         ) : (
           <>
-            <Route path="/" element={<p>Welcome! Please sign in.</p>} />
             <Route
               path="/login"
               element={(

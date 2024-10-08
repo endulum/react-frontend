@@ -1,10 +1,12 @@
 import { useLocation } from 'react-router-dom';
 // own imports
+import { useDocumentTitle } from 'usehooks-ts';
 import Form from '../reusable/Form';
 
 export default function Login({ logIn }: {
   logIn: (token: string) => void
 }) {
+  useDocumentTitle(`${import.meta.env.VITE_APP_NAME} :: Log In`);
   const { state } = useLocation();
 
   return (

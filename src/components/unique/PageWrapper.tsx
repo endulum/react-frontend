@@ -1,9 +1,10 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 // own imports
+import { type User } from '../../types';
 import { clearStoredToken } from '../../functions/tokenUtils';
 
 export default function PageWrapper({ user, initUser } : {
-  user: { username: string, id: string } | null,
+  user: User | null,
   initUser: () => void
 }) {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function PageWrapper({ user, initUser } : {
             onClick={() => {
               clearStoredToken();
               initUser();
-              navigate('/login');
+              navigate('/');
             }}
           >
             Log out

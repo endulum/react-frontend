@@ -1,8 +1,10 @@
+import { useDocumentTitle } from 'usehooks-ts';
 import Form from '../reusable/Form';
 
 export default function Account({ currentUsername }: {
   currentUsername: string
 }) {
+  useDocumentTitle(`${import.meta.env.VITE_APP_NAME} :: Account Settings`);
   return (
     <Form
       destination={{ endpoint: '/account', method: 'POST' }}

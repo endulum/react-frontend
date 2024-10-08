@@ -1,9 +1,12 @@
 // own imports
+import { useDocumentTitle } from 'usehooks-ts';
 import Form from '../reusable/Form';
 
 export default function Signup({ signUp }: {
   signUp: (username: string) => void
 }) {
+  useDocumentTitle(`${import.meta.env.VITE_APP_NAME} :: Sign Up`);
+
   return (
     <Form<null>
       destination={{ endpoint: '/signup', method: 'POST' }}

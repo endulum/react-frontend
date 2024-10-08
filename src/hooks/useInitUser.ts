@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 // own imports
+import { type User } from '../types';
 import { getStoredToken, clearStoredToken } from '../functions/tokenUtils';
 import doFetch from '../functions/doFetch';
-
-type User = {
-  username: string,
-  id: string
-};
 
 export default function useInitUser(): {
   loading: boolean,
