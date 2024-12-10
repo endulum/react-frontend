@@ -1,42 +1,47 @@
-function handleError(err: unknown): string {
-  if (err instanceof TypeError) {
-    return 'A network error occurred. Try again later.';
-  } if (err instanceof Error && err.message !== '') {
-    return err.message;
-  }
-  console.error(err);
-  return 'Sorry, something went wrong when handling your request.';
-}
+import { ofetch, FetchError } from "ofetch";
 
-export default async function doFetch<T>(endpoint: string, payload: object): Promise<{
-  data: T | null
-  status: number
-  error: string | null
+// function handleError(err: unknown): string {
+//   if (err instanceof TypeError) {
+//     return "A network error occurred. Try again later.";
+//   }
+//   if (err instanceof Error && err.message !== "") {
+//     return err.message;
+//   }
+//   console.error(err);
+//   return "Sorry, something went wrong when handling your request.";
+// }
+
+export async function doFetch<T>(
+  endpoint: string,
+  payload: object
+): Promise<{
+  data: T | null;
+  status: number;
+  error: string | null;
 }> {
   let data = null;
   let status = 0;
   let error = null;
   try {
-    const response = await fetch(import.meta.env.VITE_API_URL + endpoint, payload);
-    status = response.status;
-    const text: string = await response.text();
-
-    // first, get any json data
-    if (['{', '['].includes(text.charAt(0))) {
-      const json: unknown = JSON.parse(text);
-      data = json as T;
-    }
-
-    // then, get errors by throwing them
-    if (!response.ok) {
-      if (['<', '{'].includes(text.charAt(0))) {
-        throw new Error(response.statusText);
+    const response = await ofetch(
+      import.meta.env.VITE_API_URL + endpoint,
+      payload
+    );
+    data = response as T;
+    status = 200;
+  } catch (e) {
+    if (e instanceof FetchError) {
+      if (e.statusCode) status = e.statusCode;
+      if (typeof e.data === "string") error = e.data;
+      else {
+        data = e.data;
+        if (status === 0) error = "A network error occurred. Try again later.";
+        else error = e.statusText ?? "Something went wrong when fetching data.";
       }
-      throw new Error(text);
-    } else if (data === null) {
-      // lastly, if response is ok we can also just use the text as data
-      data = text as T;
+    } else {
+      console.error(e);
+      error = "Something went wrong when fetching data.";
     }
-  } catch (err) { error = handleError(err); }
+  }
   return { data, status, error };
 }

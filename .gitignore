@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-src/trash
+trash
 
-.env.*
+.env.development
+.env.production

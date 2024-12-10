@@ -1,21 +1,23 @@
-import { useState } from 'react';
-// own imports
-import doFetch from '../functions/doFetch';
-import { getStoredToken } from '../functions/tokenUtils';
+import { useState } from "react";
 
-type InputErrors = Array<{ path: string, value: string, msg: string }>;
+import { doFetch } from "../functions/doFetch";
+import { getStoredToken } from "../functions/tokenUtils";
 
-export default function useFormRequest<T>(
-  destination: { endpoint: string, method: 'PUT' | 'POST' | 'DELETE' },
+type InputErrors = Array<{ path: string; value: string; msg: string }>;
+
+export function useForm<T>(
+  destination: { endpoint: string; method: "GET" | "PUT" | "POST" | "DELETE" },
   onSuccess: (
-    formData: Record<string, string>, fetchResult: T
-  ) => void,
+    // to run only when the request gets a 200
+    submissionData: Record<string, string>, // do something with what you've given to the request
+    submissionResult: T // do something with what you've received from the request
+  ) => void
 ): {
-    loading: boolean,
-    error: string | null,
-    inputErrors: Record<string, string> | null,
-    handleSubmit: (event: React.FormEvent) => Promise<void>
-  } {
+  loading: boolean;
+  error: string | null;
+  inputErrors: Record<string, string> | null;
+  handleSubmit: (event: React.FormEvent) => Promise<void>;
+} {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   // one error message atop the form
@@ -44,32 +46,38 @@ export default function useFormRequest<T>(
       {
         method: destination.method,
         headers: {
-          'Content-type': 'application/json',
-          Authorization: token ? `Bearer ${token}` : '',
+          "Content-type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
         },
         body: JSON.stringify(formData),
-      },
+      }
     );
     setLoading(false);
 
     if (fetchResult.error) setError(fetchResult.error);
     if (
-      fetchResult.status === 400
-      && typeof fetchResult.data === 'object'
-      && fetchResult.data !== null
-      && 'errors' in fetchResult.data
+      fetchResult.status === 400 &&
+      typeof fetchResult.data === "object" &&
+      fetchResult.data !== null &&
+      "errors" in fetchResult.data
     ) {
       const inputErrorRecord: Record<string, string> = {};
       (fetchResult.data.errors as InputErrors).forEach((inputError) => {
         inputErrorRecord[inputError.path] = inputError.msg;
       });
       setInputErrors(inputErrorRecord);
-    } else if (fetchResult.status === 200) {
+      setError("There were some errors with your submission.");
+    }
+
+    if (fetchResult.status === 200) {
       onSuccess(formData, fetchResult.data as T);
     }
   }
 
   return {
-    loading, error, inputErrors, handleSubmit,
+    loading,
+    error,
+    inputErrors,
+    handleSubmit,
   };
 }
