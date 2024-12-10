@@ -23,13 +23,9 @@ export function useUser(): {
   async function initUser() {
     if (user) setUser(null);
     if (error) setError(null);
+    if (!loading) setLoading(true);
 
     const token = getStoredToken();
-    if (token === null) {
-      setLoading(false);
-      return;
-    }
-    if (!loading) setLoading(true);
 
     const fetchResult = await doFetch<User>("/me", {
       method: "GET",
@@ -45,6 +41,7 @@ export function useUser(): {
     } else setUser(fetchResult.data);
 
     setLoading(false);
+    fetching.current = false;
   }
 
   function changeUsername(username: string) {
