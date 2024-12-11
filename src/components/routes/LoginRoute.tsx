@@ -1,5 +1,10 @@
 import { LoginForm } from "../forms/LoginForm";
 
 export function LoginRoute() {
-  return <LoginForm />;
+  return (
+    <>
+      <h2>Log In</h2>
+      <LoginForm />
+    </>
+  );
 }

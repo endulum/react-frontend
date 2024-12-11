@@ -8,7 +8,7 @@ export function Alert({
   children: JSX.Element;
 }) {
   return (
-    <div className="alert">
+    <div className={`alert ${type}`}>
       {type === "warning" && <Warning />}
       {type === "success" && <CheckCircle />}
       {children}

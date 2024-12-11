@@ -68,6 +68,8 @@ export function Form<T>({
         return child;
       })}
 
+      <hr />
+
       <Button
         type="submit"
         disabled={loading}

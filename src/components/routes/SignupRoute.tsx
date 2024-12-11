@@ -1,5 +1,10 @@
 import { SignupForm } from "../forms/SignupForm";
 
 export function SignupRoute() {
-  return <SignupForm />;
+  return (
+    <>
+      <h2>Sign Up</h2>
+      <SignupForm />
+    </>
+  );
 }

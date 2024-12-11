@@ -1,5 +1,10 @@
 import { AccountForm } from "../forms/AccountForm";
 
 export function AccountRoute() {
-  return <AccountForm />;
+  return (
+    <>
+      <h2>Account Settings</h2>
+      <AccountForm />
+    </>
+  );
 }

@@ -28,8 +28,16 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 /* viewport */
-body, html, #root {
+/* body, html, #root {
   width: 100%;
+  height: 100%;
+} */
+
+html, body, #root {
+  min-height: 100vh;
+}
+
+body {
   height: 100%;
 }
 
